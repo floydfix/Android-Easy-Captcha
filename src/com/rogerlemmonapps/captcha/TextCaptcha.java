@@ -24,33 +24,36 @@ public class TextCaptcha extends Captcha {
 		NUMBERS_AND_LETTERS
 	}
 	
+	public TextCaptcha(int wordLength, TextOptions opt){
+		TextCaptcha(0, 0, wordLength, opt);
+	}
+	
 	public TextCaptcha(int width, int height, int wordLength, TextOptions opt){
-    	this.height = height;
-    	this.width = width;
-    	options = opt;
+    	setHeight(height);
+    	setWidth(width);
+    	this.options = opt;
     	usedColors = new ArrayList<Integer>();
     	this.wordLength = wordLength;
     	this.image = image();
-
 	}
 	
 	@Override
 	protected Bitmap image() {
-	    LinearGradient gradient = new LinearGradient(0, 0, width / wordLength, height / 2, color(), color(), Shader.TileMode.MIRROR);
+	    LinearGradient gradient = new LinearGradient(0, 0, getWidth() / this.wordLength, getHeight() / 2, color(), color(), Shader.TileMode.MIRROR);
 	    Paint p = new Paint();
 	    p.setDither(true);
 	    p.setShader(gradient);
-	    Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+	    Bitmap bitmap = Bitmap.createBitmap(getWidth(), getHeight(), Config.ARGB_8888);
 	    Canvas c = new Canvas(bitmap);
-	    c.drawRect(0, 0, width, height, p);
+	    c.drawRect(0, 0, getWidth(), getHeight(), p);
 	    Paint tp = new Paint();
 	    tp.setDither(true);
-	    tp.setTextSize(width / height * 20);
+	    tp.setTextSize(getWidth() / getHeight() * 20);
 	    
 	    Random r = new Random(System.currentTimeMillis());
 	    CharArrayWriter cab = new CharArrayWriter();
-	    answer = "";
-		for(int i = 0; i < wordLength; i ++){
+	    this.answer = "";
+		for(int i = 0; i < this.wordLength; i ++){
 			int u_l_n = r.nextInt(3);
 			char ch = ' ';
 		    switch(u_l_n){
@@ -68,17 +71,17 @@ public class TextCaptcha extends Captcha {
 		    	break;			    	
 		    }
 			cab.append(ch);
-			answer += ch;
+			this.answer += ch;
 		}
 		
 	    char[] data = cab.toCharArray();
 	    for (int i=0; i<data.length; i++) {
-	        x += (30 - (3 * wordLength)) + (Math.abs(r.nextInt()) % (65 - (1.2 * wordLength)));
-	        y = 50 + Math.abs(r.nextInt()) % 50;
+	    	this.x += (30 - (3 * this.wordLength)) + (Math.abs(r.nextInt()) % (65 - (1.2 * this.wordLength)));
+	    	this.y = 50 + Math.abs(r.nextInt()) % 50;
 	        Canvas cc = new Canvas(bitmap);
         	tp.setTextSkewX(r.nextFloat() - r.nextFloat());
 	        tp.setColor(color());
-	        cc.drawText(data, i, 1, x, y, tp);
+	        cc.drawText(data, i, 1, this.x, this.y, tp);
 	        tp.setTextSkewX(0);
 	    }
 	    return bitmap;
