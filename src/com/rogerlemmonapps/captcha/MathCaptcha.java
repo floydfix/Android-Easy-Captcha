@@ -21,8 +21,8 @@ public class MathCaptcha extends Captcha {
 	
 	public MathCaptcha(int width, int height, MathOptions opt){
 		this.height = height;
-    	this.width = width;
-    	options = opt;
+    	setWidth(width);
+    	this.options = opt;
 		usedColors = new ArrayList<Integer>();
 		this.image = image();
 	}
@@ -33,19 +33,19 @@ public class MathCaptcha extends Captcha {
 	    int two = 0;
 	    int math = 0;
 
-	    LinearGradient gradient = new LinearGradient(0, 0, width / 2, height / 2, color(), color(), Shader.TileMode.MIRROR);
+	    LinearGradient gradient = new LinearGradient(0, 0, getWidth() / 2, this.height / 2, color(), color(), Shader.TileMode.MIRROR);
 	    Paint p = new Paint();
 	    p.setDither(true);
 	    p.setShader(gradient);
-	    Bitmap bitmap = Bitmap.createBitmap(width, height, Config.ARGB_8888);
+	    Bitmap bitmap = Bitmap.createBitmap(getWidth(), this.height, Config.ARGB_8888);
 	    Canvas c = new Canvas(bitmap);
-	    c.drawRect(0, 0, width, height, p);
+	    c.drawRect(0, 0, getWidth(), this.height, p);
 	    
-	    LinearGradient fontGrad = new LinearGradient(0, 0, width / 2, height / 2, color(), color(), Shader.TileMode.CLAMP);
+	    LinearGradient fontGrad = new LinearGradient(0, 0, getWidth() / 2, this.height / 2, color(), color(), Shader.TileMode.CLAMP);
 	    Paint tp = new Paint();
 	    tp.setDither(true);
 	    tp.setShader(fontGrad);
-	    tp.setTextSize(width / height * 20);
+	    tp.setTextSize(getWidth() / this.height * 20);
 	    Random r = new Random(System.currentTimeMillis());
 		one = r.nextInt(9) + 1;
 		two = r.nextInt(9) + 1;
@@ -58,13 +58,13 @@ public class MathCaptcha extends Captcha {
 		
 		switch (math) {
 			case 0:
-				answer = (one + two) + "";
+				this.answer = (one + two) + "";
 				break;
 			case 1:
-			    answer = (one - two) + "";
+				this.answer = (one - two) + "";
 			    break;
 			case 2:
-			    answer = (one * two) + "";
+				this.answer = (one * two) + "";
 			    break;
 		}
 	    char[] data = new char[]{String.valueOf(one).toCharArray()[0], oper(math), String.valueOf(two).toCharArray()[0]};

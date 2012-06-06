@@ -9,15 +9,15 @@ import android.graphics.Color;
 public abstract class Captcha {
 	protected Bitmap image;
 	protected String answer = "";
-	public int width = 300;
-	public int height = 100;
+	private int width;
+	private int height;
 	protected int x = 0;
 	protected int y = 0;
+	protected static List<Integer> usedColors;
 	
 	protected abstract Bitmap image();
-	
-	static List<Integer> usedColors;
-    public static int color(){
+
+	public static int color(){
     	Random r = new Random();
     	int number;
     	do{
@@ -39,11 +39,35 @@ public abstract class Captcha {
     	}
     }
     
+    public int getWidth(){
+    	return this.width;
+    }
+    
+    public void setWidth(int width){
+    	if(width > 0 && width < 10000){
+    		this.width = width;
+    	}else{
+    		this.width = 300;
+    	}
+    }
+    
+    public int getHeight(){
+    	return this.height;
+    }
+    
+    public void setHeight(int height){
+    	if(height > 0 && height < 10000){
+    		this.height = height;
+    	}else{
+    		this.height = 100;
+    	}
+    }
+    
 	public Bitmap getImage() {
-		return image;
+		return this.image;
 	}
 
 	public boolean checkAnswer(String ans) {
-		return ans.equals(answer);
+		return ans.equals(this.answer);
 	}
 }
